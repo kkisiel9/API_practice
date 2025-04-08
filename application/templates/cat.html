@@ -1,0 +1,37 @@
+{% extends "layout2.html" %}
+
+{% block body_content %}
+    <h3 class="margin">Cat Profile</h3>
+    <section>
+        <p>ID: {{ cat.CatID }}</p>
+        <p>Name: <strong>{{ cat.CatName }} {{ cat.CatSurname }}</strong></p>
+        <p>Age: {{ cat.CatAge }} years old</p>
+        <p>Description: {{ cat.CatDescription }}</p>
+        <hr>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <img src="{{ image_src }}" class="img-responsive margin" width="40%" alt="Photo of {{ cat.CatName }}">
+            </div>
+            {% if image_gif %}
+            <div class="col-sm-6">
+                <img src="{{ image_gif }}" class="img-responsive margin" width="40%" alt="GIF of {{ cat.CatName }}">
+            </div>
+            {% endif %}
+        </div>
+        <hr>
+
+        <div class="row">
+            <div class="col-sm-6">
+                {% if previous_url %}
+                    <a href="{{ previous_url }}">Previous</a>
+                {% endif %}
+            </div>
+            <div class="col-sm-6">
+                {% if next_url %}
+                    <a href="{{ next_url }}">Next</a>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+{% endblock %}

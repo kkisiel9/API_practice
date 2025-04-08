@@ -5,8 +5,13 @@ from datetime import datetime
 from application.utilities import get_time_of_day
 from application.fake_data import products, people
 import os
+from application.data_access import get_cats
+from application.data_access import get_cat_by_id
+
 from application.forms.register_form import RegisterForm
 from application.data_access import add_person, get_people
+from app import bcrypt
+
 
 
 @app.route('/')
@@ -15,7 +20,7 @@ def home():
     session['loggedIn'] = False
     now = datetime.now()
     time_slot = get_time_of_day(now.hour)
-    return render_template('home.html', title='Home', time_slot=time_slot, is_morning=True)
+    return render_template('home.html', title='Home', time_slot=time_slot)
 
 
 @app.route('/welcome/<name>')
@@ -51,6 +56,44 @@ def products_by_id(product_id):
 
     title = products[product_id]['name']
     return render_template('product.html', product=products[product_id], time_slot=time_slot, next_url=next_url, previous_url=previous_url, image_src=image_src, image_gif=image_gif, title=title)
+
+
+@app.route('/cat/<int:cat_id>')
+def cat_by_id(cat_id):
+    cat = get_cat_by_id(cat_id)
+
+    if not cat:
+        return f"<h1>No cat found with ID {cat_id}</h1>"
+
+    time_slot = get_time_of_day(datetime.now().hour)
+    next_url = url_for('cat_by_id', cat_id=cat_id + 1)
+    previous_url = url_for('cat_by_id', cat_id=cat_id - 1) if cat_id > 1 else False
+
+    image_src = url_for('static', filename=f'images/cat_{cat_id}.jpg')
+    gif_path = os.path.join(app.static_folder, f'images/cat_{cat_id}.gif')
+    image_gif = url_for('static', filename=f'images/cat_{cat_id}.gif') if os.path.exists(gif_path) else False
+    print(cat)
+
+    return render_template('cat.html',
+                           cat=cat,
+                           time_slot=time_slot,
+                           next_url=next_url,
+                           previous_url=previous_url,
+                           image_src=image_src,
+                           image_gif=image_gif,
+                           title=cat['CatName'])
+
+
+
+
+@app.route('/cats')
+def all_cats():
+    cats = get_cats()  # this variable holds the list of cats
+    return render_template('cats.html', cats=cats, title='All Cats')
+
+@app.route('/adopt')
+def adopt(): # this variable holds the list of cats
+    return render_template('adopt.html')
 
 
 @app.route('/products')
@@ -118,13 +161,21 @@ def adminpage2():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    # app.logger.debug("Start of login")
     if request.method == 'POST':
-        session['username'] = request.form['username']
-        # app.logger.debug("Username is: " + session['username'])
-        session['loggedIn'] = True
-        session['role'] = 'admin'
-        return redirect(url_for('all_products'))
+        username = request.form['username']
+        entered_password = request.form['password']
+
+        # In real use, get this from the database
+        stored_hash = "$2b$12$xTLQ04RwPqnBCva6VtUUHuGkOvkQpdMyw9R9pJcfdrLYDqpLcmJeq"  # example bcrypt hash for 'meow'
+
+        if bcrypt.check_password_hash(stored_hash, entered_password):
+            session['loggedIn'] = True
+            session['role'] = 'admin'
+            session['username'] = username
+            return redirect(url_for('all_cats'))
+
+        return render_template('login.html', title="Login", error="Invalid credentials.")
+
     return render_template('login.html', title="Login")
 
 
@@ -134,4 +185,4 @@ def logout():
     session.pop('username', None)
     session.pop('role', None)
     session['loggedIn'] = False
-    return redirect(url_for('all_products'))
+    return redirect(url_for('all_cats'))

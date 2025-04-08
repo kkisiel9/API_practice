@@ -3,26 +3,27 @@ body {
 
       font: 20px Quicksand, sans-serif;
       line-height: 1.8;
-      color: #f5f6f7;
+      color:white;
   }
-  h1    {color: #9B287B;}
-  p {font-size: 16px;}
+  h1    {color: #6B0F1A;}
+  p {font-size: 16px;
+  colour:white;}
   .margin {margin-bottom: 25px;}
   .bg-1 {
       background-color: #9B287B; /* Amaranth Deep Purple */
-      color: #ffffff;
+      color: #6B0F1A;;
   }
   .bg-2 {
       background-color: #122932; /* Dark Gunmetal */
-      color: #ffffff;
+      color: white;
   }
   .bg-3 {
-      background-color: #F5E6E8; /* Isabelline */
-      color: #555555;
+      background-color: #FFF5EE; /* Isabelline */
+      color: #6B0F1A;
   }
   .bg-4 {
-      background-color: #383B53; /* Charcoal */
-      color: #fff;
+      background-color: #525B76; /* Charcoal */
+      color:white ;
   }
   .container-fluid {
       padding-top: 20px;
@@ -36,9 +37,12 @@ body {
       margin-bottom: 0;
       font-size: 12px;
       letter-spacing: 5px;
+      color: #6B0F1A;;
+      background-color: #D6EDFF !important;
   }
   .navbar-nav  li a:hover {
-      color: #9B287B !important;
+      color: #6B0F1A;;
+      background-color: #D6EDFF !important;
   }
     #message {
       color: red;

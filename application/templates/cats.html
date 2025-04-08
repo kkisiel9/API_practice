@@ -1,0 +1,36 @@
+{% extends "layout2.html" %}
+{% block body_content %}
+
+<section>
+    <div class="row fw-bold">
+        <div class="col-sm-2">ID</div>
+        <div class="col-sm-2">Name</div>
+        <div class="col-sm-2">Age</div>
+        <div class="col-sm-4">Description</div>
+        <div class="col-sm-2">Image</div>
+    </div>
+    <hr>
+    {% for cat in cats %}
+    <div class="row align-items-center">
+        <div class="col-sm-2">
+            <p>{{ cat.CatID }}</p>
+        </div>
+        <div class="col-sm-2">
+            <p><strong>{{ cat.CatName }} {{ cat.CatSurname }}</strong></p>
+        </div>
+        <div class="col-sm-2">
+            <p>{{ cat.CatAge }} years old</p>
+        </div>
+        <div class="col-sm-4">
+            <p>{{ cat.CatDescription }}</p>
+        </div>
+        <div class="col-sm-2">
+            <img src="{{ url_for('static', filename='images/cat_' ~ cat.CatID ~ '.jpg') }}"
+                 class="img-responsive" width="100%" alt="Photo of {{ cat.CatName }}">
+        </div>
+    </div>
+    <hr>
+    {% endfor %}
+</section>
+
+{% endblock %}
